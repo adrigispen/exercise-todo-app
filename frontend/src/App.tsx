@@ -1,8 +1,13 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { CreateTodo } from "./components/CreateTodo";
 import { TodoList } from "./components/TodoList";
-import { Todo } from "./types/todo";
+import {
+  useGetTodosQuery,
+  useAddTodoMutation,
+  useUpdateTodoMutation,
+  useDeleteTodoMutation,
+} from "./store/api";
 
 const AppContainer = styled.div`
   max-width: 800px;
@@ -26,85 +31,44 @@ const ErrorMessage = styled.div`
 `;
 
 export function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
   const [showCompleted, setShowCompleted] = useState<boolean>(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const {
+    data: todos = [],
+    isLoading,
+    error,
+  } = useGetTodosQuery({ showCompleted });
+  const [addTodo] = useAddTodoMutation();
+  const [updateTodo] = useUpdateTodoMutation();
+  const [deleteTodo] = useDeleteTodoMutation();
 
-  useEffect(() => {
-    fetchTodos();
-  }, [showCompleted]);
-
-  const fetchTodos = async () => {
+  const handleAddTodo = async (title: string, description?: string) => {
     try {
-      setIsLoading(true);
-      const url = `/api/todos?showCompleted=${showCompleted}`;
-
-      const response = await fetch(url);
-      if (!response.ok) throw new Error("Failed to fetch todos");
-
-      const data = await response.json();
-      setTodos(data);
-      setError(null);
+      await addTodo({ title, description, completed: false }).unwrap();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch todos");
-    } finally {
-      setIsLoading(false);
+      // Error handling is managed by RTK Query
+      console.error("Failed to add todo:", err);
     }
   };
 
-  const addTodo = async (title: string, description?: string) => {
-    try {
-      const response = await fetch("/api/todos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, description, completed: false }),
-      });
-
-      if (!response.ok) throw new Error("Failed to add todo");
-
-      const newTodo = await response.json();
-      setTodos((prev) => [...prev, newTodo]);
-      setError(null);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to add todo");
-      throw err;
-    }
-  };
-
-  const toggleTodo = async (id: string) => {
+  const handleToggleTodo = async (id: string) => {
     const todo = todos.find((t) => t.id === id);
     if (!todo) return;
 
     try {
-      const response = await fetch(`/api/todos/${id}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ completed: !todo.completed }),
-      });
-
-      if (!response.ok) throw new Error("Failed to update todo");
-
-      const updatedTodo = await response.json();
-      setTodos((prev) => prev.map((t) => (t.id === id ? updatedTodo : t)));
-      setError(null);
+      await updateTodo({
+        id,
+        completed: !todo.completed,
+      }).unwrap();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to update todo");
+      console.error("Failed to toggle todo:", err);
     }
   };
 
-  const deleteTodo = async (id: string) => {
+  const handleDeleteTodo = async (id: string) => {
     try {
-      const response = await fetch(`/api/todos/${id}`, {
-        method: "DELETE",
-      });
-
-      if (!response.ok) throw new Error("Failed to delete todo");
-
-      setTodos((prev) => prev.filter((t) => t.id !== id));
-      setError(null);
+      await deleteTodo(id).unwrap();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to delete todo");
+      console.error("Failed to delete todo:", err);
     }
   };
 
@@ -112,16 +76,20 @@ export function App() {
     <AppContainer>
       <Header>Todos</Header>
 
-      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {error && (
+        <ErrorMessage>
+          {error instanceof Error ? error.message : "An error occurred"}
+        </ErrorMessage>
+      )}
 
-      <CreateTodo onAdd={addTodo} />
+      <CreateTodo onAdd={handleAddTodo} />
 
       <TodoList
         todos={todos}
         showCompleted={showCompleted}
         onShowCompletedChange={setShowCompleted}
-        onToggle={toggleTodo}
-        onDelete={deleteTodo}
+        onToggle={handleToggleTodo}
+        onDelete={handleDeleteTodo}
         isLoading={isLoading}
       />
     </AppContainer>
