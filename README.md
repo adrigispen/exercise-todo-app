@@ -1,85 +1,96 @@
-# Todo Application
+# Todo App
 
-## Project Overview
-Basic todo app using TypeScript, React, and Node.js. While the original requirements specified C# and MAUI, this implementation uses JavaScript ecosystem technologies.
+Basic full-stack todo app using TypeScript, React, and Node.js. While the original requirements specified C# and MAUI, this implementation uses technologies I'm more familiar with
 
-## Architectural Decisions
+## Stack
 
-### Backend Architecture
-- **TypeScript + Express**: Chosen for type safety and industry-standard REST API development
-- **Clean Architecture**: Separated business logic (TodoService) from API layer for better maintainability
-- **In-Memory Storage**: Implemented using JavaScript Map for efficient CRUD operations
-- **SOLID Principles**: Service layer is isolated and follows single responsibility principle
-- **RESTful Design**: Follows REST conventions for predictable API behavior
+### Backend
+- TypeScript
+- Express
+- TypeBox for runtime validation
+- Jest for testing
 
-### Type Safety
-- Strong typing throughout the application using TypeScript
-- Interface-based design for Todo entities
-- Clear type boundaries between API and service layer
+### Frontend
+- React with TypeScript
+- Styled Components for styling
+- RTK Query for API state management
+- Redux Toolkit for state management
 
-### API Features
-- Full CRUD operations for Todo items
-- Filter capability for completed/uncompleted todos
-- Error handling and appropriate HTTP status codes
-- CORS enabled for frontend integration
+## Features
+- Create todos with title and description (first 50 chars become title)
+- Toggle todo completion status
+- Delete todos
+- Filter to show/hide completed todos
+- Type-safe API with runtime validation
+- Clean and responsive UI
 
 ## Getting Started
 
 ### Prerequisites
 - Node.js (v14 or higher)
-- npm or yarn
+- npm
 
 ### Installation
-1. Clone the repository
-```bash
-git clone [your-repo-url]
-cd [your-project-name]
-```
 
-2. Install dependencies
+1. Clone the repository:
+```bash
+git clone [your-repository-url]
+cd todo-app
+```
+2. Install backend dependencies:
 ```bash
 cd backend
 npm install
 ```
-
-3. Start the development server
+3. Install frontend dependencies: 
 ```bash
+cd ../frontend
+npm install
+```
+
+### Running the Application
+
+1. Start the backend server: 
+```bash
+cd backend 
+npm run dev
+```
+2. In a new terminal tab, start the frontend
+```bash
+cd frontend
 npm run dev
 ```
 
-### API Endpoints
+This will run the backend at http://localhost:3000, and you can access the application at http://localhost:5173
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | /api/todos?showCompleted=true/false | Get all todos or only in-progress tasks |
-| GET | /api/todos/:id | Get todo by ID |
-| POST | /api/todos | Create new todo |
-| PUT | /api/todos/:id | Update todo |
-| DELETE | /api/todos/:id | Delete todo |
+### Testing
 
-### Request/Response Examples
-
-#### Create Todo
-```json
-POST /api/todos
-{
-    "title": "Complete project",
-    "description": "Finish the todo app",
-    "completed": false
-}
+```bash
+cd backend
+npm test
 ```
 
-#### Response
-```json
-{
-    "id": "abc123",
-    "title": "Complete project",
-    "description": "Finish the todo app",
-    "completed": false,
-    "createdAt": "2024-01-03T10:00:00Z",
-    "updatedAt": "2024-01-03T10:00:00Z"
-}
-```
+## Didn't implement 
 
-## Testing
-Basic api tests with Jest
+### Testing
+
+- Frontend unit tests for components
+- Frontend integration tests for API interactions
+- E2E tests with Cypress or Playwright
+
+### Features
+
+- Edit todo title and description
+- Separate inputs for title and description
+- Support for multiple todo lists
+- Due dates for todos
+- Priority levels
+- Categories/tags
+
+### Technical Improvements
+
+- Error boundary implementation
+- Loading states/skeleton screens
+- Proper error handling and user feedback
+- API response caching
+- Pagination for large lists
