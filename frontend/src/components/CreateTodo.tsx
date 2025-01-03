@@ -60,7 +60,6 @@ export function CreateTodo({ onAdd }: CreateTodoProps) {
       const trimmedText = text.trim();
       const title = trimmedText.slice(0, 50);
       const description = trimmedText.slice(50);
-      console.log(title, description);
 
       await onAdd(title, description);
       setText("");
