@@ -1,6 +1,8 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import { TodoService } from "./services/todoService";
+import { validate } from "./middleware/validate";
+import { TodoSchema } from "./validation/schemas";
 
 export function createApp(todoService: TodoService) {
   const app = express();
@@ -54,11 +56,19 @@ export function createApp(todoService: TodoService) {
   };
 
   // Routes
-  app.post("/api/todos", createTodo);
+  app.post("/api/todos", validate(TodoSchema.create), createTodo);
   app.get("/api/todos", getAllTodos);
-  app.get("/api/todos/:id", getTodoById);
-  app.put("/api/todos/:id", updateTodo);
-  app.delete("/api/todos/:id", deleteTodo);
+  app.get("/api/todos/:id", validate(TodoSchema.params, "params"), getTodoById);
+  app.put(
+    "/api/todos/:id",
+    [validate(TodoSchema.params, "params"), validate(TodoSchema.update)],
+    updateTodo
+  );
+  app.delete(
+    "/api/todos/:id",
+    validate(TodoSchema.params, "params"),
+    deleteTodo
+  );
 
   return app;
 }

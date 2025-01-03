@@ -32,6 +32,19 @@ describe("Todo API", () => {
         updatedAt: expect.any(String),
       });
     });
+
+    it("should validate required fields", async () => {
+      const invalidTodo = {
+        description: "Missing title",
+      };
+
+      const response = await request(app)
+        .post("/api/todos")
+        .send(invalidTodo)
+        .expect(400);
+
+      expect(response.body).toHaveProperty("errors");
+    });
   });
   describe("GET /api/todos", () => {
     it("should return empty array when no todos exist", async () => {
