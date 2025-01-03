@@ -19,7 +19,7 @@ export function createApp(todoService: TodoService) {
 
   // Get All Todos
   const getAllTodos = async (req: Request, res: Response) => {
-    const todos = await todoService.getTodos;
+    const todos = await todoService.getTodos();
     res.json(todos);
   };
 
