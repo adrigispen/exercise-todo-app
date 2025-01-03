@@ -95,7 +95,7 @@ npm test
 If I'd had more time, I'd have added a few additional features:
 
 - Ability to edit todo title and description
-- Improved form for createing todos with separate inputs for title and description
+- Improved form for creating todos with separate inputs for title and description
 - Due dates for todos
 - Priority levels
 - Categories/tags
