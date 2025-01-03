@@ -17,11 +17,12 @@ const FilterContainer = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  justify-content: right;
 `;
 
 const Checkbox = styled.input`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1rem;
+  height: 1rem;
 `;
 
 const Label = styled.label`
@@ -65,7 +66,7 @@ export function TodoList({
           checked={showCompleted}
           onChange={(e) => onShowCompletedChange(e.target.checked)}
         />
-        <Label htmlFor="show-completed">Show completed</Label>
+        <Label htmlFor="show-completed">Show completed todos</Label>
       </FilterContainer>
 
       {todos.length === 0 ? (

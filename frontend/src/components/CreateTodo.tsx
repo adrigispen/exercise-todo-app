@@ -76,7 +76,7 @@ export function CreateTodo({ onAdd }: CreateTodoProps) {
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
-          placeholder="What needs to be done?"
+          placeholder="What needs doing?"
           disabled={isSubmitting}
         />
         <AddButton type="submit" disabled={!text.trim() || isSubmitting}>

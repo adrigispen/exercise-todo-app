@@ -74,7 +74,7 @@ export function App() {
 
   return (
     <AppContainer>
-      <Header>Todos</Header>
+      <Header>Todo List</Header>
 
       {error && (
         <ErrorMessage>

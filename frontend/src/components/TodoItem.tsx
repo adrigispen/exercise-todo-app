@@ -19,8 +19,8 @@ const Content = styled.div`
 `;
 
 const Checkbox = styled.input`
-  width: 1.2rem;
-  height: 1.2rem;
+  width: 1rem;
+  height: 1rem;
 `;
 
 const Title = styled.span<{ completed: boolean }>`
@@ -47,7 +47,7 @@ const TodoText = styled.div`
 
 const DeleteButton = styled.button`
   padding: 0.5rem 1rem;
-  color: #dc2626;
+  color: #8b0000;
   border: none;
   border-radius: 4px;
   cursor: pointer;
