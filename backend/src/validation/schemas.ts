@@ -18,4 +18,8 @@ export const TodoSchema = {
   params: Type.Object({
     id: Type.String(),
   }),
+
+  query: Type.Object({
+    showCompleted: Type.Boolean(),
+  }),
 };

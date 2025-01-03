@@ -21,7 +21,8 @@ export function createApp(todoService: TodoService) {
 
   // Get All Todos
   const getAllTodos = async (req: Request, res: Response) => {
-    const todos = await todoService.getTodos();
+    const showCompleted = req.query.showCompleted === "true" ? true : false;
+    const todos = await todoService.filterTodos(showCompleted);
     res.json(todos);
   };
 

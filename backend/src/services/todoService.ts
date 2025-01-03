@@ -49,4 +49,10 @@ export class TodoService {
   async deleteTodo(id: string): Promise<boolean> {
     return this.todos.delete(id);
   }
+
+  async filterTodos(showCompleted: boolean): Promise<Todo[]> {
+    const todos = Array.from(this.todos.values());
+    if (showCompleted) return todos;
+    return todos.filter((todo) => todo.completed === false);
+  }
 }

@@ -76,6 +76,24 @@ describe("Todo API", () => {
       expect(response.body[0]).toMatchObject(todoData1);
       expect(response.body[1]).toMatchObject(todoData2);
     });
+
+    it("should filter by completed status", async () => {
+      // Create completed and uncompleted todos
+      await request(app)
+        .post("/api/todos")
+        .send({ title: "Todo 1", completed: true });
+
+      await request(app)
+        .post("/api/todos")
+        .send({ title: "Todo 2", completed: false });
+
+      const nonCompletedResponse = await request(app)
+        .get("/api/todos?showCompleted=false")
+        .expect(200);
+
+      expect(nonCompletedResponse.body).toHaveLength(1);
+      expect(nonCompletedResponse.body[0].completed).toBe(false);
+    });
   });
 
   describe("PUT /api/todos/:id", () => {
